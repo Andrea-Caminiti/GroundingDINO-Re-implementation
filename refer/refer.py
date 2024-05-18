@@ -54,6 +54,7 @@ class REFER():
             self.IMAGE_DIR = osp.join(data_root, 
                 'images/mscoco/train2014' # 'images/mscoco/images/train2014')
                 ) 
+            self.data_root = data_root # delete later; jsut a hack
         elif dataset == 'refclef':
             self.IMAGE_DIR = osp.join(data_root, 
                 'images/saiapr_tc-12')
@@ -245,7 +246,12 @@ class REFER():
         ax = plt.gca()
         # show image
         image = self.Imgs[ref['image_id']]
-        I = io.imread(osp.join(self.IMAGE_DIR, image['file_name']))
+        try:
+            I = io.imread(osp.join(self.IMAGE_DIR, image['file_name']))
+        except FileNotFoundError:
+            self.IMAGE_DIR = osp.join(self.data_root, 
+                'images/mscoco/images/train2014'
+                ) 
         ax.imshow(I)
         # show refer expression
         for sid, sent in enumerate(ref['sentences']):
