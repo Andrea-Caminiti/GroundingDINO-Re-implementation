@@ -348,7 +348,7 @@ if __name__ == '__main__':
 
 		# pprint(ref)
 		print(f'\nRef: {ref}\n')
-		print(f'The label is {refer.Cats[ref['category_id']]} ')
+		print(f"The label is {refer.Cats[ref['category_id']]} ")
 		plt.figure()
 		refer.showRef(ref, seg_box='box')
 		plt.show()
