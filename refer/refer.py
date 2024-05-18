@@ -252,6 +252,7 @@ class REFER():
             self.IMAGE_DIR = osp.join(self.data_root, 
                 'images/mscoco/images/train2014'
                 ) 
+            I = io.imread(osp.join(self.IMAGE_DIR, image['file_name']))
         ax.imshow(I)
         # show refer expression
         for sid, sent in enumerate(ref['sentences']):
