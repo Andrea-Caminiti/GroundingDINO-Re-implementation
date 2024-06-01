@@ -8,6 +8,7 @@ from Backbones import MultiModalFeatureExtractor
 class FeatureEnhancerLayer(nn.Module):
     def __init__(self, d_model,  num_heads=8, num_levels=4, num_points=4, img2col_step= 64,):
         super(FeatureEnhancerLayer, self).__init__()
+        self.d_model = d_model
         self.image_self_attn = DeformableAttention(d_model, num_heads=num_heads, num_levels=num_levels, num_points=num_points, img2col_step=64, batch_first=True)
         self.text_self_attn = nn.MultiheadAttention(d_model, num_heads=num_heads, batch_first=True)
         self.img_to_text_cross_attn = nn.MultiheadAttention(d_model, num_heads=num_heads, batch_first=True)
@@ -20,9 +21,9 @@ class FeatureEnhancerLayer(nn.Module):
         self.backbone = MultiModalFeatureExtractor()
         self.input_proj_list = []
         self.bert_size = 768
-        self.feat_map = nn.Linear(bert_size, self.d_model, bias=True)
+        self.feat_map = nn.Linear(self.bert_size, self.d_model, bias=True)
     def forward(self, images, texts, reference_points):
-        text_features, img_features = backbone(texts, images)
+        text_features, img_features = self.backbone(texts, images)
 
         #Img_features
         spatial_shapes = []
@@ -41,7 +42,7 @@ class FeatureEnhancerLayer(nn.Module):
             feat_flatten.append(self.input_proj[l](feat.permute(0,3,1,2)).permute(0, 2, 3, 1).flatten(1,2))
             spatial_shapes.append([H, W])
         spatial_shapes = torch.tensor(spatial_shapes)
-        feat_flatten = torch.cat(feat_flatten, 1)
+        img_features = torch.cat(feat_flatten, 1)
 
         #Text_features
         text_features = self.feat_map(text_features)
