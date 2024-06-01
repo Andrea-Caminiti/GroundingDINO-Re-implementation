@@ -268,7 +268,7 @@ class MultiScaleDeformableAttention(nn.Module):
         bs, num_query, _ = query.shape
         bs, num_value, _ = value.shape
 
-        #assert (spatial_shapes[:, 0] * spatial_shapes[:, 1]).sum() == num_value, 'spatialshapes {}, num_value {}'.format((spatial_shapes[:, 0] * spatial_shapes[:, 1]).sum(), num_value)
+        assert (spatial_shapes[:, 0] * spatial_shapes[:, 1]).sum() == num_value, 'spatialshapes {}, num_value {}'.format((spatial_shapes[:, 0] * spatial_shapes[:, 1]).sum(), num_value)
 
         value = self.value_proj(value)
         if key_padding_mask is not None:

@@ -15,7 +15,7 @@ class TextBackbone(nn.Module):
         input_ids = encoded_inputs['input_ids']
         attention_mask = encoded_inputs['attention_mask']
         outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
-        pooled_output = outputs.pooler_output  # [CLS] token representation
+        pooled_output = outputs.last_hidden_state   # [CLS] token representation
         return pooled_output
 
 class ImageBackbone(nn.Module):
